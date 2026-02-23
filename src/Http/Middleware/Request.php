@@ -29,11 +29,13 @@ class Request
         // $request->ip() respects Laravel's TrustProxies middleware,
         // unlike reading $_SERVER headers directly.
         return $decrypted === 'opcache'
-            || in_array($request->ip(), [$this->getServerIp(), '127.0.0.1', '::1']);
+            || in_array($request->ip(), [$this->getServerIp($request), '127.0.0.1', '::1']);
     }
 
-    protected function getServerIp(): string
+    protected function getServerIp($request): string
     {
-        return $_SERVER['SERVER_ADDR'] ?? $_SERVER['LOCAL_ADDR'] ?? '127.0.0.1';
+        return $request->server('SERVER_ADDR')
+            ?? $request->server('LOCAL_ADDR')
+            ?? '127.0.0.1';
     }
 }
