@@ -1,6 +1,8 @@
 <?php
 
-$router->get('clear', 'OpcacheController@clear');
-$router->get('config', 'OpcacheController@config');
-$router->get('status', 'OpcacheController@status');
-$router->get('compile', 'OpcacheController@compile');
+use Appstract\Opcache\Http\Controllers\OpcacheController;
+
+$router->get('clear', [OpcacheController::class, 'clear']);
+$router->get('config', [OpcacheController::class, 'config']);
+$router->get('status', [OpcacheController::class, 'status']);
+$router->get('compile', [OpcacheController::class, 'compile']);

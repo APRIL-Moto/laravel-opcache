@@ -6,10 +6,7 @@ use Illuminate\Support\ServiceProvider;
 
 class OpcacheServiceProvider extends ServiceProvider
 {
-    /**
-     * Bootstrap the application services.
-     */
-    public function boot()
+    public function boot(): void
     {
         if ($this->app->runningInConsole()) {
             $this->commands([
@@ -25,19 +22,17 @@ class OpcacheServiceProvider extends ServiceProvider
         }
     }
 
-    /**
-     * Register the application services.
-     */
-    public function register()
+    public function register(): void
     {
-        // config
         $this->mergeConfigFrom(__DIR__.'/../config/opcache.php', 'opcache');
 
-        // bind routes
+        if (! config('opcache.enabled', true)) {
+            return;
+        }
+
         $this->app->router->group([
-            'middleware'    => [\Appstract\Opcache\Http\Middleware\Request::class],
-            'prefix'        => config('opcache.prefix'),
-            'namespace'     => 'Appstract\Opcache\Http\Controllers',
+            'middleware' => [Http\Middleware\Request::class],
+            'prefix'     => config('opcache.prefix'),
         ], function ($router) {
             require __DIR__.'/Http/routes.php';
         });
